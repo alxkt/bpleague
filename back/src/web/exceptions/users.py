@@ -1,4 +1,4 @@
-from web import logger
+from ..config import logger
 
 
 class UserError(Exception):

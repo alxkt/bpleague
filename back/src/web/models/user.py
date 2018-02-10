@@ -1,7 +1,8 @@
 import hashlib
 
 from peewee import *
-from web.database import db
+
+from ..database import db
 
 
 class User(Model):

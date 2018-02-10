@@ -1,4 +1,3 @@
-from env.database import db
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import JWTManager, create_access_token, get_jwt_identity, jwt_refresh_token_required, \
     create_refresh_token
@@ -6,6 +5,7 @@ from web.exceptions.users import *
 from web.models import User
 
 from .register import create_register
+from ..database import db
 
 auth_bp = Blueprint('login', __name__)
 

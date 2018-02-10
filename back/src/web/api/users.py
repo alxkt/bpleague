@@ -1,8 +1,8 @@
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
-
-from web import logger
 from web.managers.users import UsersManager
+
+from ..config import logger
 
 userManager = UsersManager()
 

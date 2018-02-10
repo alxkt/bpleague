@@ -1,10 +1,11 @@
 import hashlib
 import re
 
-from env.database import db
 from peewee import IntegrityError, DoesNotExist
 from web.exceptions import *
 from web.models import User
+
+from ..database import db
 
 
 class UsersManager:

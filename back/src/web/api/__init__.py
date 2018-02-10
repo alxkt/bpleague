@@ -1,9 +1,9 @@
 from flask import Blueprint
 from flask_restful import Api
-from web import logger
 
 from .me import me
 from .users import Users, User
+from ..config import logger
 
 api_bp = Blueprint('api', __name__)
 
