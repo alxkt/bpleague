@@ -1,6 +1,7 @@
 from flask import redirect, url_for, session, request, jsonify
 from flask_jwt_extended import create_access_token, create_refresh_token
 from flask_oauthlib.client import OAuth
+from werkzeug import security
 
 from ..managers import UsersManager
 from ..config import config
@@ -9,14 +10,13 @@ from ..models import User
 
 
 def create_oauth(app, auth_bp):
-    app.secret_key = 'development'
     oauth = OAuth(app)
 
     viarezo = oauth.remote_app(
         'viarezo',
         consumer_key=config['oauth']['CLIENT_ID'],
         consumer_secret=config['oauth']['CLIENT_SECRET'],
-        request_token_params={'scope': 'default'},
+        request_token_params={'scope': 'default', 'state': lambda: security.gen_salt(10)},
         base_url=config['oauth']['base_url'],
         request_token_url=None,
         access_token_method='POST',
@@ -58,8 +58,9 @@ def create_oauth(app, auth_bp):
                 user = users[0]
             else:
                 manager = UsersManager()
-                manager.create_user(email)
-                user = User.select().where(User.email == email)[0]
+                first_name = me.data['firstName']
+                last_name = me.data['lastName']
+                user = manager.create_user(email, first_name, last_name)
 
         identity = {"id": user.id, "admin": user.admin}
         response = {'access_token': create_access_token(identity=identity),

@@ -16,6 +16,7 @@
   "flask": {
     "debug": true,
     "jwt_secret": "QW3JBwjhh/mzQFx/kSarUR6s0FlXjRsM6DsbJ65Ttmg=",
+    "oauth_secret": "TudaHTIRFOksack23=oCAOE",
     "jwt_expiration": 2592000
   }
 }

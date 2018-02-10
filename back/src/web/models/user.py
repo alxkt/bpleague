@@ -1,5 +1,3 @@
-import hashlib
-
 from peewee import *
 
 from ..database import db
@@ -10,7 +8,6 @@ class User(Model):
     first_name = CharField()
     last_name = CharField()
     email = CharField(unique=True, index=True)
-    password = CharField()
     _admin = IntegerField()
 
     @property
@@ -30,9 +27,6 @@ class User(Model):
 
     class Meta:
         database = db
-
-    def check_password(self, password):
-        return self.password == hashlib.sha224(password.encode('utf-8')).hexdigest()
 
 
 db.connect()

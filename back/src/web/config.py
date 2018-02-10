@@ -8,6 +8,7 @@ config = json.load(open(os.environ.get('CONFIG_FILE', './config/config.json')))
 
 class FlaskConfig(object):
     DEBUG = config['flask'].get('debug', False)
+    SECRET_KEY = config['flask'].get('oauth_secret', False)
     JWT_SECRET_KEY = config['flask'].get('jwt_secret', False)
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(seconds=config['flask'].get('jwt_expiration', 900))
 

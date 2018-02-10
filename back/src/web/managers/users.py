@@ -1,9 +1,9 @@
 import re
 
 from peewee import IntegrityError, DoesNotExist
-from web.exceptions import *
-from web.models import User
 
+from ..exceptions import *
+from ..models import User
 from ..database import db
 
 
@@ -29,17 +29,18 @@ class UsersManager:
             except DoesNotExist:
                 raise UserNotExisting
 
-    def create_user(self, email, admin=False):
+    def create_user(self, email, first_name, last_name, admin=False):
         if re.match(r'^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$', email) is None:
             raise BadEmail
         with self.db.atomic():
             try:
-                User.create(
-                    first_name='test',
-                    last_name='test',
+                user = User.create(
+                    first_name=first_name,
+                    last_name=last_name,
                     email=email,
                     admin=admin
                 )
+                return user
             except IntegrityError:
                 raise UserAlreadyRegistered
 
