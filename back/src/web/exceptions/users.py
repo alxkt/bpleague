@@ -20,16 +20,6 @@ class UserAlreadyRegistered(UserError):
         UserError.__init__(self, 'This user is already registered.')
 
 
-class BadUser(UserError):
-    def __init__(self):
-        UserError.__init__(self, 'No password or email specified.')
-
-
-class BadEmailPassword(UserError):
-    def __init__(self):
-        UserError.__init__(self, 'This email and password are not matching.', 401)
-
-
 class UserNotExisting(UserError):
     def __init__(self):
         UserError.__init__(self, 'This user is not existing.')
@@ -38,11 +28,6 @@ class UserNotExisting(UserError):
 class BadEmail(UserError):
     def __init__(self):
         UserError.__init__(self, 'This email is not correct.')
-
-
-class PasswordTooShort(UserError):
-    def __init__(self):
-        UserError.__init__(self, 'This password is too short.')
 
 
 class UserNotAdmin(UserError):

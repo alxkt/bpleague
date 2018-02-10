@@ -1,4 +1,3 @@
-import hashlib
 import re
 
 from peewee import IntegrityError, DoesNotExist
@@ -30,18 +29,15 @@ class UsersManager:
             except DoesNotExist:
                 raise UserNotExisting
 
-    def create_user(self, email, password, admin=False):
+    def create_user(self, email, admin=False):
         if re.match(r'^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$', email) is None:
             raise BadEmail
-        if len(password) < 8:
-            raise PasswordTooShort
         with self.db.atomic():
             try:
                 User.create(
                     first_name='test',
                     last_name='test',
                     email=email,
-                    password=hashlib.sha224(password.encode('utf-8')).hexdigest(),
                     admin=admin
                 )
             except IntegrityError:
