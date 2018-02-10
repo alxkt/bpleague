@@ -4,7 +4,8 @@
     "CLIENT_SECRET": "",
     "auth_url": "https://auth.viarezo.fr/oauth/authorize",
     "token_url": "https://auth.viarezo.fr/oauth/token",
-    "data_url": "https://auth.viarezo.fr/api/user/show/me"
+    "base_url": "https://auth.viarezo.fr/api/",
+    "me_path": "user/show/me"
   },
   "database": {
     "host": "localhost",
