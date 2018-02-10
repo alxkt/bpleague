@@ -1,19 +1,37 @@
+import json
 import logging
+import os
+from datetime import timedelta
+
+config = json.load(open(os.environ.get('CONFIG_FILE', './config/config.json')))
 
 
 class FlaskConfig(object):
-    DEBUG = True
-    TESTING = False
-    SECRET_KEY = 'testtesttesttest'
+    DEBUG = config['flask'].get('debug', False)
+    JWT_SECRET_KEY = config['flask'].get('jwt_secret', False)
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(seconds=config['flask'].get('jwt_expiration', 900))
 
 
 flask_config = FlaskConfig
+
 logger = logging.getLogger()
-handler = logging.StreamHandler()
-formatter = logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
-logger.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(process)d %(asctime)s %(name)-12s %(levelname)-8s %(message)s')
+
+stream_handler = logging.StreamHandler()
+stream_handler.setFormatter(formatter)
+logger.addHandler(stream_handler)
+
+if not os.path.exists('../volumes/logs'):
+    os.makedirs('../volumes//logs')
+file_handler = logging.FileHandler('../volumes//logs/bpleague.log')
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
+
+log_level = config.get('log', 'INFO')
+if log_level == 'DEBUG':
+    logger.setLevel(logging.DEBUG)
+else:
+    logger.setLevel(logging.INFO)
 
 logger = logging.getLogger('bpleague')
 

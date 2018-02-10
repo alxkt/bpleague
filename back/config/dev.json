@@ -1,0 +1,20 @@
+{
+  "oauth": {
+    "CLIENT_ID": "",
+    "CLIENT_SECRET": "",
+    "auth_url": "https://auth.viarezo.fr/oauth/authorize",
+    "token_url": "https://auth.viarezo.fr/oauth/token",
+    "data_url": "https://auth.viarezo.fr/api/user/show/me"
+  },
+  "database": {
+    "host": "localhost",
+    "user": "bpleague",
+    "password": "bpleague"
+  },
+  "log": "DEBUG",
+  "flask": {
+    "debug": true,
+    "jwt_secret": "QW3JBwjhh/mzQFx/kSarUR6s0FlXjRsM6DsbJ65Ttmg=",
+    "jwt_expiration": 2592000
+  }
+}

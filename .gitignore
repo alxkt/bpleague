@@ -52,3 +52,4 @@ crashlytics-build.properties
 fabric.properties
 
 volumes/
+docker-compose.yml

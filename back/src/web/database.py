@@ -1,10 +1,10 @@
-import os
-
 from peewee import PostgresqlDatabase
+
+from .config import config
 
 db = PostgresqlDatabase(
     'bpleague',
-    user='bpleague',
-    password=os.environ.get('POSTGRES_PASSWORD', 'bpleague'),
-    host=os.environ.get('POSTGRES_HOST', 'localhost')
+    user=config['database'].get('user', 'bpleague'),
+    password=config['database'].get('password', 'bpleague'),
+    host=config['database'].get('host', 'localhost')
 )
