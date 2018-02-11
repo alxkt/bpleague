@@ -7,7 +7,6 @@ from ..managers import UsersManager
 from ..config import config
 from ..database import db
 from ..models import User
-from ..exceptions.users import NotConnected
 
 
 def create_oauth(app, auth_bp):

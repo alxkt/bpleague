@@ -50,7 +50,7 @@ setup(
         'peewee==3.0.16',
         'psycopg2==2.7.4',
         'psycopg2-binary==2.7.4',
-        'Flask-JWT-Extended==3.4.0',
+        'Flask-JWT-Extended==3.7.0',
         'requests==2.18.4',
         'Flask-OAuthlib==0.9.4'
     ],

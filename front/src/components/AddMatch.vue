@@ -12,7 +12,7 @@
                 <div class="uk-margin">
                   <input class="uk-input boundary-align" type="text" placeholder="Partenaire" v-model="ally.name">
                   <div uk-drop="mode: click; pos: bottom-justify; boundary: .boundary-align; boundary-align: true">
-                    <div class="uk-card uk-card-body uk-card-default" v-if="search.length > 0 && ally.id == null">
+                    <div class="uk-card uk-card-body uk-card-default" v-if="search.length > 0">
                       <ul class="uk-list uk-list-divider">
                         <li v-for="ally_search in search" v-on:click="select(ally, ally_search)">{{ ally_search.first_name }} {{ ally_search.last_name }}</li>
                       </ul>
@@ -25,7 +25,7 @@
                 <div class="uk-margin">
                   <input class="uk-input" type="text" placeholder="Adversaire A" v-model="adversaryA.name">
                   <div uk-drop="mode: click; pos: bottom-justify; boundary: .boundary-align; boundary-align: true">
-                    <div class="uk-card uk-card-body uk-card-default" v-if="search.length > 0 && adversaryA.id == null">
+                    <div class="uk-card uk-card-body uk-card-default" v-if="search.length > 0">
                       <ul class="uk-list uk-list-divider">
                         <li v-for="adversary_search in search" v-on:click="select(adversaryA, adversary_search)">{{ adversary_search.first_name }} {{ adversary_search.last_name }}</li>
                       </ul>
@@ -36,7 +36,7 @@
                 <div class="uk-margin">
                   <input class="uk-input" type="text" placeholder="Adversaire B" v-model="adversaryB.name">
                   <div uk-drop="mode: click; pos: bottom-justify; boundary: .boundary-align; boundary-align: true">
-                    <div class="uk-card uk-card-body uk-card-default" v-if="search.length > 0 && adversaryB.id == null">
+                    <div class="uk-card uk-card-body uk-card-default" v-if="search.length > 0">
                       <ul class="uk-list uk-list-divider">
                         <li v-for="adversary_search in search" v-on:click="select(adversaryB, adversary_search)">{{ adversary_search.first_name }} {{ adversary_search.last_name }}</li>
                       </ul>
