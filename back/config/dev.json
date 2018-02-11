@@ -5,7 +5,8 @@
     "auth_url": "https://auth.viarezo.fr/oauth/authorize",
     "token_url": "https://auth.viarezo.fr/oauth/token",
     "base_url": "https://auth.viarezo.fr/api/",
-    "me_path": "user/show/me"
+    "me_path": "user/show/me",
+    "callback_url": "http://localhost:5000/auth/callback"
   },
   "database": {
     "host": "localhost",

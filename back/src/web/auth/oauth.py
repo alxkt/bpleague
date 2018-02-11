@@ -7,6 +7,7 @@ from ..managers import UsersManager
 from ..config import config
 from ..database import db
 from ..models import User
+from ..exceptions.users import NotConnected
 
 
 def create_oauth(app, auth_bp):
@@ -29,19 +30,26 @@ def create_oauth(app, auth_bp):
         if 'viarezo_token' in session:
             me = viarezo.get(config['oauth']['me_path'])
             return jsonify(me.data)
-        return redirect(url_for('login'))
+        raise NotConnected
 
     @auth_bp.route('/login')
     def login():
-        return viarezo.authorize(callback=url_for('.callback', _external=True))
+        auth = viarezo.authorize(config['oauth']['callback_url'])
+        return jsonify({'url': auth.location})
 
     @auth_bp.route('/logout')
     def logout():
         session.pop('viarezo_token', None)
-        return redirect(url_for('index'))
+        return jsonify({'msg': 'success'})
 
     @auth_bp.route('/callback')
     def callback():
+        code = request.args.get('code')
+        state = request.args.get('state')
+        return redirect('http://localhost:8080/#/auth/callback?code={}&state={}'.format(code, state))
+
+    @auth_bp.route('/authorize')
+    def authorize():
         resp = viarezo.authorized_response()
         if resp is None or resp.get('access_token') is None:
             return 'Access denied: reason=%s error=%s resp=%s' % (

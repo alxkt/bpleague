@@ -33,3 +33,8 @@ class BadEmail(UserError):
 class UserNotAdmin(UserError):
     def __init__(self):
         UserError.__init__(self, 'This user has no right to do this.', 403)
+
+
+class NotConnected(UserError):
+    def __init__(self):
+        UserError.__init__(self, 'You are not connected', 403)
