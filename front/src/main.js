@@ -3,8 +3,13 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import UIkit from 'uikit';
+import Icons from 'uikit/dist/js/uikit-icons';
 
-Vue.config.productionTip = false
+// loads the Icon plugin
+UIkit.use(Icons);
+
+Vue.config.productionTip = process.env.NODE_ENV === 'production';
 
 /* eslint-disable no-new */
 new Vue({
