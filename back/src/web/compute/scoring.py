@@ -1,6 +1,3 @@
-import operator
-
-
 def compute_scoring(users, matchs):
     users_indexed = {}
     for user in users:

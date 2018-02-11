@@ -1,4 +1,4 @@
-from flask import redirect, url_for, session, request, jsonify
+from flask import redirect, session, request, jsonify
 from flask_jwt_extended import create_access_token, create_refresh_token
 from flask_oauthlib.client import OAuth, OAuthException
 from werkzeug import security
