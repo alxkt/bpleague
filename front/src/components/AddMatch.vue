@@ -76,6 +76,10 @@
 <script>
   import axios from 'axios';
   import _ from 'lodash';
+  import UIkit from 'uikit';
+
+  import matchs from '../modules/matchs';
+  import auth from '../modules/auth';
 
   export default {
     name: 'AddMatch',
@@ -140,7 +144,13 @@
         field.id = search.id;
       },
       addMatch: function () {
-        console.log(this.ally);
+        const me_id = auth.user.profile.id;
+        matchs.addMatch(me_id, this.ally.id, this.adversaryA.id, this.adversaryB.id, this.score_us, this.score_them).then(() => {
+          UIkit.modal('#modal-full').hide();
+          UIkit.notification("<span uk-icon='icon: check'></span> Match ajouté.", {status: 'primary'});
+        }).catch(() => {
+
+        });
       }
     }
   }
