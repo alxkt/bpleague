@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="uk-container">
-      <h1 class="uk-heading-divider">Classement</h1>
+      <h1 class="uk-heading-divider">Classement <span uk-icon="refresh" id="refresh" v-on:click="updateLeaderboard"></span></h1>
 
       <div class="uk-card uk-card-default uk-card-body uk-padding-large uk-overflow-auto" id="leaderboard">
         <nav class="uk-navbar-container" uk-navbar>
@@ -55,15 +55,24 @@
       AddMatch
     },
     mounted() {
-      let main = this;
+      this.updateLeaderboard();
 
-      axios.get(process.env.API_URL + '/users?score=true')
-        .then(function (response) {
-          main.users = response.data;
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      this.$root.$on('updateLeaderboard', () => {
+          this.updateLeaderboard();
+      })
+    },
+    methods: {
+      updateLeaderboard() {
+        let main = this;
+
+        axios.get(process.env.API_URL + '/users?score=true')
+          .then(function (response) {
+            main.users = response.data;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
     }
   }
 </script>
@@ -84,6 +93,50 @@
 
   .me {
     background-color: rgba(216, 245, 221, 0.69);
+  }
+
+  #refresh {
+    margin-top: 0.5em;
+    float: right;
+  }
+
+  #refresh:hover {
+    -webkit-animation: rotating 1s linear infinite;
+    -moz-animation: rotating 1s linear infinite;
+    -ms-animation: rotating 1s linear infinite;
+    -o-animation: rotating 1s linear infinite;
+    animation: rotating 1s linear infinite;
+  }
+
+  @-webkit-keyframes rotating /* Safari and Chrome */
+  {
+    from {
+      -webkit-transform: rotate(0deg);
+      -o-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    to {
+      -webkit-transform: rotate(360deg);
+      -o-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes rotating {
+    from {
+      -ms-transform: rotate(0deg);
+      -moz-transform: rotate(0deg);
+      -webkit-transform: rotate(0deg);
+      -o-transform: rotate(0deg);
+      transform: rotate(0deg);
+    }
+    to {
+      -ms-transform: rotate(360deg);
+      -moz-transform: rotate(360deg);
+      -webkit-transform: rotate(360deg);
+      -o-transform: rotate(360deg);
+      transform: rotate(360deg);
+    }
   }
 
 </style>

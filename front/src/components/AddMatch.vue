@@ -169,6 +169,7 @@
       },
       addMatch: function () {
         const me_id = auth.user.profile.id;
+        let vw = this;
         if (this.ally.id == null) {
           UIkit.notification("Vous n'avez pas mis de partenaire !", {status: 'danger'});
         } else if (this.adversaryA.id == null || this.adversaryB.id == null) {
@@ -180,6 +181,7 @@
             UIkit.modal('#modal-full').hide();
             UIkit.notification("<span uk-icon='icon: check'></span> Match ajouté.", {status: 'primary'});
             Object.assign(this.$data, init());
+            vw.$root.$emit('updateLeaderboard', true);
           }).catch(() => {});
         }
       }
