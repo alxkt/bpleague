@@ -12,9 +12,9 @@
                 <div class="uk-margin">
                   <input class="uk-input boundary-align" type="text" placeholder="Partenaire" v-model="ally.name">
                   <div uk-drop="mode: click; pos: bottom-justify; boundary: .boundary-align; boundary-align: true">
-                    <div class="uk-card uk-card-body uk-card-default" v-if="search.length > 0">
+                    <div class="uk-card uk-card-body uk-card-default" v-if="search.length > 0 && ally.id == null">
                       <ul class="uk-list uk-list-divider">
-                        <li v-for="ally_search in search" v-on:click="select(ally, ally_search)">{{ ally_search.first_name }} {{ ally_search.last_name }}</li>
+                        <li v-for="ally_search in search" v-on:click="select(ally, ally_search)">{{ ally_search.name }}</li>
                       </ul>
                     </div>
                   </div>
@@ -25,9 +25,9 @@
                 <div class="uk-margin">
                   <input class="uk-input" type="text" placeholder="Adversaire A" v-model="adversaryA.name">
                   <div uk-drop="mode: click; pos: bottom-justify; boundary: .boundary-align; boundary-align: true">
-                    <div class="uk-card uk-card-body uk-card-default" v-if="search.length > 0">
+                    <div class="uk-card uk-card-body uk-card-default" v-if="search.length > 0 && adversaryA.id == null">
                       <ul class="uk-list uk-list-divider">
-                        <li v-for="adversary_search in search" v-on:click="select(adversaryA, adversary_search)">{{ adversary_search.first_name }} {{ adversary_search.last_name }}</li>
+                        <li v-for="adversary_search in search" v-on:click="select(adversaryA, adversary_search)">{{ adversary_search.name }}</li>
                       </ul>
                     </div>
                   </div>
@@ -36,9 +36,9 @@
                 <div class="uk-margin">
                   <input class="uk-input" type="text" placeholder="Adversaire B" v-model="adversaryB.name">
                   <div uk-drop="mode: click; pos: bottom-justify; boundary: .boundary-align; boundary-align: true">
-                    <div class="uk-card uk-card-body uk-card-default" v-if="search.length > 0">
+                    <div class="uk-card uk-card-body uk-card-default" v-if="search.length > 0 && adversaryB.id == null">
                       <ul class="uk-list uk-list-divider">
-                        <li v-for="adversary_search in search" v-on:click="select(adversaryB, adversary_search)">{{ adversary_search.first_name }} {{ adversary_search.last_name }}</li>
+                        <li v-for="adversary_search in search" v-on:click="select(adversaryB, adversary_search)">{{ adversary_search.name }}</li>
                       </ul>
                     </div>
                   </div>
@@ -81,10 +81,8 @@
   import matchs from '../modules/matchs';
   import auth from '../modules/auth';
 
-  export default {
-    name: 'AddMatch',
-    data() {
-      return {
+  function init() {
+    return {
         score_us: 0,
         score_them: 0,
         ally: {
@@ -99,8 +97,15 @@
           name: '',
           id: null
         },
-        search: []
+        search: [],
+        searchNames: []
       }
+  }
+
+  export default {
+    name: 'AddMatch',
+    data() {
+      return init();
     },
     computed: {
       ally_name() {
@@ -115,12 +120,21 @@
     },
     watch: {
       ally_name: function (newAlly) {
+        if (!this.searchNames.includes(newAlly)) {
+          this.ally.id = null;
+        }
         this.getUsers(newAlly);
       },
       adversaryA_name: function (newAdversary) {
+        if (!this.searchNames.includes(newAdversary)) {
+          this.adversaryA.id = null;
+        }
         this.getUsers(newAdversary);
       },
       adversaryB_name: function (newAdversary) {
+        if (!this.searchNames.includes(newAdversary)) {
+          this.adversaryB.id = null;
+        }
         this.getUsers(newAdversary);
       }
     },
@@ -128,10 +142,20 @@
       getUsers: _.debounce(
         function (search) {
           let addMatch = this;
+          const me_id = auth.user.profile.id;
 
           axios.get(process.env.API_URL + '/users?search=' + search)
             .then(function (response) {
               addMatch.search = response.data;
+              addMatch.search = addMatch.search.reduce(function (a, b) {
+                let people = b;
+                people.name = people.first_name + ' ' + people.last_name;
+                addMatch.searchNames.push(people.name);
+                if (people.id !== addMatch.ally.id && people.id !== addMatch.adversaryA.id && people.id !== addMatch.adversaryB.id && people.id !== me_id) {
+                  a.push(people);
+                }
+                return a;
+              }, []);
             })
             .catch(function (error) {
               console.log(error);
@@ -140,17 +164,24 @@
         500
       ),
       select: function(field, search) {
-        field.name = search.first_name + ' ' + search.last_name;
+        field.name = search.name;
         field.id = search.id;
       },
       addMatch: function () {
         const me_id = auth.user.profile.id;
-        matchs.addMatch(me_id, this.ally.id, this.adversaryA.id, this.adversaryB.id, this.score_us, this.score_them).then(() => {
-          UIkit.modal('#modal-full').hide();
-          UIkit.notification("<span uk-icon='icon: check'></span> Match ajouté.", {status: 'primary'});
-        }).catch(() => {
-
-        });
+        if (this.ally.id == null) {
+          UIkit.notification("Vous n'avez pas mis de partenaire !", {status: 'danger'});
+        } else if (this.adversaryA.id == null || this.adversaryB.id == null) {
+          UIkit.notification("Vous n'avez pas mis d'adversaire !", {status: 'danger'});
+        } else if (this.score_us === 0 && this.score_them === 0 ) {
+          UIkit.notification("Le score indiqué est un peu chelou.", {status: 'danger'});
+        } else {
+          matchs.addMatch(me_id, this.ally.id, this.adversaryA.id, this.adversaryB.id, this.score_us, this.score_them).then(() => {
+            UIkit.modal('#modal-full').hide();
+            UIkit.notification("<span uk-icon='icon: check'></span> Match ajouté.", {status: 'primary'});
+            Object.assign(this.$data, init());
+          }).catch(() => {});
+        }
       }
     }
   }
