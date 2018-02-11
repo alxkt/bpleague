@@ -17,6 +17,7 @@
   $global-primary-background: rgb(134, 141, 245)
   $global-secondary-background: rgb(54, 56, 69)
   $global-danger-background: rgb(227, 160, 164)
+  $table-row-active-background: rgba(134, 141, 245, 0.5)
 
   @import "../node_modules/uikit/src/scss/variables-theme.scss"
   @import "../node_modules/uikit/src/scss/mixins-theme.scss"
