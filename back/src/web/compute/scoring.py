@@ -58,4 +58,4 @@ def compute_scoring(users, matchs):
         user = users_indexed[id]
         users.append(user)
 
-    return sorted(users, key=lambda x: (x['score'], 1 / x['matches'], x['victories'], x['goal_average']), reverse=True)
+    return sorted(users, key=lambda x: (x['score'], -1 * x['matches'], x['victories'], x['goal_average']), reverse=True)
