@@ -48,7 +48,7 @@ function authorize(context, code, state) {
         console.log(error);
       }
     });
-};
+}
 
 function refresh(context) {
   return new Promise(((resolve, reject) => {
@@ -69,7 +69,7 @@ function refresh(context) {
         reject();
       });
   }));
-};
+}
 
 function logout() {
   localStorage.removeItem('access_token');
@@ -78,7 +78,7 @@ function logout() {
   user.authenticated = false;
   user.profile = null;
   router.replace('/');
-};
+}
 
 function checkAuth() {
   return new Promise((resolve, reject) => {
@@ -119,7 +119,7 @@ function checkAuth() {
       router.replace('/');
     }
   });
-};
+}
 
 export default {
   user,

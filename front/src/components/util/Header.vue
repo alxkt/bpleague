@@ -10,9 +10,8 @@
     </div>
 
     <div class="uk-navbar-right">
-      <span class="uk-margin-right" v-if="name != null">Connecté en tant que {{ name }}</span>
-      <button class="uk-button uk-button-primary uk-margin-right" href="#modal-full" uk-toggle>Ajouter un match
-      </button>
+      <a href="#" class="uk-button uk-button-text uk-margin-right" v-if="name != null" v-on:click="logout">Connecté en tant que {{ name }}</a>
+      <button class="uk-button uk-button-primary uk-margin-right" href="#modal-full" uk-toggle>Ajouter un match</button>
     </div>
   </nav>
 </template>
@@ -25,6 +24,11 @@
     data() {
       return {
         name: null
+      }
+    },
+    methods: {
+      logout() {
+        auth.logout();
       }
     },
     mounted() {
