@@ -1,5 +1,5 @@
 from flask_jwt_extended import jwt_required
-from flask_restful import Resource
+from flask_restful import Resource, request
 from web.managers.users import UsersManager
 
 from ..config import logger
@@ -18,8 +18,9 @@ class Users(Resource):
         Get the list of users in BPLeague
         :return: list of users
         """
-        logger.debug('Get on /users called.')
-        return userManager.get_all()
+        search = request.args.get('search', None)
+        logger.debug('Get on /users called. Search : {}'.format(search))
+        return userManager.get_all(search=search)
 
 
 class User(Resource):

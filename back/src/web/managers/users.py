@@ -12,10 +12,17 @@ class UsersManager:
     def __init__(self):
         self.db = db
 
-    def get_all(self):
+    def get_all(self, search=None):
         with self.db.transaction():
             user_list = []
-            for user in User.select().dicts():
+            if search is None or search == '':
+                query = User.select().dicts()
+            else:
+                query = User.select().where(
+                    (User.first_name.contains(search)) |
+                    (User.last_name.contains(search))
+                ).dicts()
+            for user in query:
                 user_list.append(user)
             logger.debug('Get all users from db. Number of users : {}'.format(len(user_list)))
             return user_list

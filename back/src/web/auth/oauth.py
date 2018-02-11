@@ -43,7 +43,6 @@ def create_oauth(app, auth_bp):
 
     @auth_bp.route('/authorize')
     def authorize():
-        print('prout')
         resp = viarezo.authorized_response()
         if resp is None or resp.get('access_token') is None:
             return 'Access denied: reason=%s error=%s resp=%s' % (
