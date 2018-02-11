@@ -1,12 +1,18 @@
 <template>
   <div id="app" class="uk-background-default">
+    <bp-header v-if="$route.path.includes('main')"></bp-header>
     <router-view/>
   </div>
 </template>
 
 <script>
+  import BpHeader from '@/components/util/Header';
+
   export default {
-    name: 'App'
+    name: 'App',
+    components: {
+      bpHeader: BpHeader
+    }
   }
 </script>
 
