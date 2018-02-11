@@ -4,7 +4,7 @@
       <div class="uk-modal-dialog">
         <button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
         <div class="uk-grid-collapse uk-child-width-1-2@s uk-flex-middle" uk-grid>
-          <div class="uk-background-cover" uk-height-viewport id="splash"></div>
+          <div class="uk-background-cover uk-visible@s" uk-height-viewport id="splash"></div>
           <div class="uk-padding-large" uk-height-viewport>
             <h1 class="uk-heading-divider">Ajouter un match</h1>
             <form class="uk-form-horizontal uk-margin-large">
@@ -196,12 +196,6 @@
 
   #splash {
     background-image: url('../assets/images/splash.jpg');
-  }
-
-  @media only screen and (max-width: 768px) {
-    #splash {
-      display: none;
-    }
   }
 
 </style>

@@ -29,12 +29,14 @@
   }
 
   #title {
-    max-width: 600px;
+    width: 600px;
+    max-width: 90%;
     margin-top: 3em;
   }
 
   #loading {
-    max-width: 500px;
+    width: 500px;
+    max-width: 90%;
     margin: auto;
   }
 </style>

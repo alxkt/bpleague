@@ -1,6 +1,6 @@
 from flask import redirect, url_for, session, request, jsonify
 from flask_jwt_extended import create_access_token, create_refresh_token
-from flask_oauthlib.client import OAuth
+from flask_oauthlib.client import OAuth, OAuthException
 from werkzeug import security
 
 from ..managers import UsersManager
@@ -42,7 +42,10 @@ def create_oauth(app, auth_bp):
 
     @auth_bp.route('/authorize')
     def authorize():
-        resp = viarezo.authorized_response()
+        try:
+            resp = viarezo.authorized_response()
+        except OAuthException:
+            return jsonify({'msg': 'error'}), 400
         if resp is None or resp.get('access_token') is None:
             return 'Access denied: reason=%s error=%s resp=%s' % (
                 request.args['error'],

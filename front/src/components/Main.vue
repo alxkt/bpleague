@@ -17,13 +17,18 @@
         <table class="uk-table uk-table-divider uk-table-hover" v-if="users.length > 0">
           <thead>
           <tr>
-            <th class="uk-table-shrink">Position</th>
+            <th class="uk-table-shrink">#</th>
             <th class="uk-width-large">Nom</th>
-            <th class="uk-width-small">Points</th>
-            <th class="uk-width-small">Joués</th>
-            <th class="uk-width-small">Victoires</th>
-            <th class="uk-width-small">Defaites</th>
-            <th class="uk-width-small">Goal Average</th>
+            <th class="uk-width-small uk-visible@s">Points</th>
+            <th class="uk-width-small uk-hidden@s">Pts</th>
+            <th class="uk-width-small uk-visible@s">Joués</th>
+            <th class="uk-width-small uk-hidden@s">J</th>
+            <th class="uk-width-small uk-visible@s">Victoires</th>
+            <th class="uk-width-small uk-hidden@s">V</th>
+            <th class="uk-width-small uk-visible@s">Defaites</th>
+            <th class="uk-width-small uk-hidden@s">D</th>
+            <th class="uk-width-small uk-visible@s">Goal Average</th>
+            <th class="uk-width-small uk-hidden@s">GA</th>
           </tr>
           </thead>
           <tbody>
