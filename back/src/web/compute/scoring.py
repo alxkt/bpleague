@@ -1,0 +1,51 @@
+import operator
+
+
+def compute_scoring(users, matchs):
+    users_indexed = {}
+    for user in users:
+        user['score'] = 0
+        users_indexed[user['id']] = user
+
+    for match in matchs:
+        teamAB = [match['id_playerA'], match['id_playerB']]
+        teamCD = [match['id_playerC'], match['id_playerD']]
+        if match['scoreAB'] == 0:
+            # AB has loosed
+            loosers = teamAB
+            winners = teamCD
+            useful_score = match['scoreCD']
+        elif match['scoreCD'] == 0:
+            # CD has loosed
+            loosers = teamCD
+            winners = teamAB
+            useful_score = match['scoreAB']
+        else:
+            raise Exception
+
+        if useful_score == 1:
+            goal_loosers = 2
+            goal_winners = 3
+        elif 2 <= useful_score <= 4:
+            goal_loosers = 1
+            goal_winners = 3
+        elif 5 <= useful_score <= 7:
+            goal_loosers = 1
+            goal_winners = 4
+        elif 8 <= useful_score <= 10:
+            goal_loosers = 1
+            goal_winners = 5
+        else:
+            raise Exception
+
+        for player in loosers:
+            users_indexed[player]['score'] += goal_loosers
+        for player in winners:
+            users_indexed[player]['score'] += goal_winners
+
+    users = []
+    for id in users_indexed.keys():
+        user = users_indexed[id]
+        users.append(user)
+
+    return sorted(users, key=operator.itemgetter('score'), reverse=True)

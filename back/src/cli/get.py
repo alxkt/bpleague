@@ -14,3 +14,11 @@ def users():
     manager = UsersManager()
     click.echo(click.style('== Users ==', bold=True))
     click.echo(manager.get_all())
+
+
+@get.command()
+def matchs():
+    from web.managers import MatchsManager
+    manager = MatchsManager()
+    click.echo(click.style('== Matchs ==', bold=True))
+    click.echo(manager.get_all())

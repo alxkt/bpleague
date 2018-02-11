@@ -12,10 +12,9 @@
                 <input class="uk-search-input" type="search" placeholder="Search...">
               </form>
             </div>
-
           </div>
         </nav>
-        <table class="uk-table uk-table-divider uk-table-hover">
+        <table class="uk-table uk-table-divider uk-table-hover" v-if="users.length > 0">
           <thead>
           <tr>
             <th class="uk-table-shrink">Position</th>
@@ -24,18 +23,14 @@
           </tr>
           </thead>
           <tbody>
-          <tr>
-            <td>1</td>
-            <td>Alexis Tacnet</td>
-            <td>3 / 2</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Brice Rauby</td>
-            <td>1 / 3</td>
+          <tr v-for="user in users" v-if="user.score > 0" v-bind:class="{ me: user.id === me_id }">
+            <td>{{ users.indexOf(user) + 1 }}</td>
+            <td>{{ user.first_name }} {{ user.last_name }}</td>
+            <td>{{ user.score }}</td>
           </tr>
           </tbody>
         </table>
+        <div uk-spinner v-else id="spinner"></div>
       </div>
     </div>
 
@@ -45,15 +40,30 @@
 
 <script>
   import AddMatch from './AddMatch';
+  import auth from '../modules/auth';
+  import axios from 'axios';
 
   export default {
     name: 'Main',
     data() {
       return {
+        users: [],
+        me_id: auth.user.profile.id
       }
     },
     components: {
       AddMatch
+    },
+    mounted() {
+      let main = this;
+
+      axios.get(process.env.API_URL + '/users?score=true')
+        .then(function (response) {
+          main.users = response.data;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     }
   }
 </script>
@@ -65,6 +75,15 @@
 
   .uk-card {
     margin: 3em auto auto;
+  }
+
+  #spinner {
+    margin-left: 45%;
+    margin-top: 5em;
+  }
+
+  .me {
+    background-color: rgba(216, 245, 221, 0.69);
   }
 
 </style>

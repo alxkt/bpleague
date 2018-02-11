@@ -16,8 +16,8 @@ class MatchsManager:
     def get_all(self):
         with self.db.transaction():
             matchs_list = []
-            for user in Match.select().dicts():
-                matchs_list.append(user)
+            for match in Match.select().dicts():
+                matchs_list.append(match)
             logger.debug('Get all matchs from db. Number of matchs : {}'.format(len(matchs_list)))
             return matchs_list
 
