@@ -25,13 +25,6 @@ def create_oauth(app, auth_bp):
         authorize_url=config['oauth']['auth_url']
     )
 
-    @auth_bp.route('/')
-    def index():
-        if 'viarezo_token' in session:
-            me = viarezo.get(config['oauth']['me_path'])
-            return jsonify(me.data)
-        raise NotConnected
-
     @auth_bp.route('/login')
     def login():
         auth = viarezo.authorize(config['oauth']['callback_url'])
@@ -50,6 +43,7 @@ def create_oauth(app, auth_bp):
 
     @auth_bp.route('/authorize')
     def authorize():
+        print('prout')
         resp = viarezo.authorized_response()
         if resp is None or resp.get('access_token') is None:
             return 'Access denied: reason=%s error=%s resp=%s' % (

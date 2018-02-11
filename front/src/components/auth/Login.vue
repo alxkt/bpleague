@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <img src="../assets/title.png" id="title" class="uk-margin">
+    <img src="../../assets/title.png" id="title" class="uk-margin">
     <div class="uk-card uk-card-default uk-card-body uk-padding-large" id="text">
       <h1 class="uk-heading-divider">Bienvenue</h1>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sed elit convallis, laoreet nisl venenatis, placerat
@@ -13,16 +13,21 @@
 </template>
 
 <script>
+  import auth from "../../modules/auth/index";
+
   export default {
     name: 'Login',
-    data() {
-      return {
-        msg: 'Welcome to Your Vue.js App'
-      }
+    mounted() {
+      let login = this;
+
+      auth.checkAuth().then(() => {
+        login.$router.replace('/main');
+      }).catch(() => {
+      });
     },
     methods: {
       login() {
-
+        auth.login(this);
       }
     }
   }
