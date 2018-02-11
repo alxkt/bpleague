@@ -194,6 +194,10 @@
     width: 100%;
   }
 
+  #modal-full {
+    z-index: 1030;
+  }
+
   #splash {
     background-image: url('../assets/images/splash.jpg');
   }
