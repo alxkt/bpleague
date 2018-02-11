@@ -1,6 +1,6 @@
 <template>
-  <div class="add-match">
-    <div id="modal-full" class="uk-modal-full" uk-modal>
+  <div class="add-match uk-animation-toggle">
+    <div id="modal-full" class="uk-modal-full uk-animation-slide-top" uk-modal>
       <div class="uk-modal-dialog">
         <button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
         <div class="uk-grid-collapse uk-child-width-1-2@s uk-flex-middle" uk-grid>
