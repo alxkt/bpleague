@@ -5,6 +5,10 @@ def compute_scoring(users, matchs):
     users_indexed = {}
     for user in users:
         user['score'] = 0
+        user['matches'] = 0
+        user['victories'] = 0
+        user['looses'] = 0
+        user['goal_average'] = 0
         users_indexed[user['id']] = user
 
     for match in matchs:
@@ -40,12 +44,18 @@ def compute_scoring(users, matchs):
 
         for player in loosers:
             users_indexed[player]['score'] += goal_loosers
+            users_indexed[player]['matches'] += 1
+            users_indexed[player]['looses'] += 1
+            users_indexed[player]['goal_average'] -= useful_score
         for player in winners:
             users_indexed[player]['score'] += goal_winners
+            users_indexed[player]['matches'] += 1
+            users_indexed[player]['victories'] += 1
+            users_indexed[player]['goal_average'] += useful_score
 
     users = []
     for id in users_indexed.keys():
         user = users_indexed[id]
         users.append(user)
 
-    return sorted(users, key=operator.itemgetter('score'), reverse=True)
+    return sorted(users, key=lambda x: (x['score'], 1 / x['matches'], x['victories'], x['goal_average']), reverse=True)

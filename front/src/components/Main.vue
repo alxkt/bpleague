@@ -19,7 +19,11 @@
           <tr>
             <th class="uk-table-shrink">Position</th>
             <th class="uk-width-large">Nom</th>
-            <th class="uk-width-small">V / D</th>
+            <th class="uk-width-small">Points</th>
+            <th class="uk-width-small">Joués</th>
+            <th class="uk-width-small">Victoires</th>
+            <th class="uk-width-small">Defaites</th>
+            <th class="uk-width-small">Goal Average</th>
           </tr>
           </thead>
           <tbody>
@@ -27,6 +31,10 @@
             <td>{{ users.indexOf(user) + 1 }}</td>
             <td>{{ user.first_name }} {{ user.last_name }}</td>
             <td>{{ user.score }}</td>
+            <td>{{ user.matches }}</td>
+            <td>{{ user.victories }}</td>
+            <td>{{ user.looses }}</td>
+            <td>{{ user.goal_average }}</td>
           </tr>
           </tbody>
         </table>
