@@ -9,7 +9,7 @@
             <div class="uk-navbar-item">
               <form class="uk-search uk-search-navbar">
                 <span uk-search-icon></span>
-                <input class="uk-search-input" type="search" placeholder="Search...">
+                <input class="uk-search-input" type="search" placeholder="Search..." v-model="search">
               </form>
             </div>
           </div>
@@ -23,7 +23,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr v-for="user in users" v-if="user.score > 0" v-bind:class="{ me: user.id === me_id }">
+          <tr v-for="user in users_filtered" v-if="user.score > 0" v-bind:class="{ me: user.id === me_id }">
             <td>{{ users.indexOf(user) + 1 }}</td>
             <td>{{ user.first_name }} {{ user.last_name }}</td>
             <td>{{ user.score }}</td>
@@ -48,7 +48,14 @@
     data() {
       return {
         users: [],
-        me_id: auth.user.profile.id
+        users_filtered: [],
+        me_id: auth.user.profile.id,
+        search: ''
+      }
+    },
+    watch: {
+      search: function (newSearch, oldSearch) {
+        this.updateFiltering();
       }
     },
     components: {
@@ -65,13 +72,23 @@
       updateLeaderboard() {
         let main = this;
 
+        this.users = [];
         axios.get(process.env.API_URL + '/users?score=true')
           .then(function (response) {
             main.users = response.data;
+            main.updateFiltering();
           })
           .catch(function (error) {
             console.log(error);
           });
+      },
+      updateFiltering() {
+        this.users_filtered = this.users.reduce((users, user) => {
+          if (user.first_name.toLocaleLowerCase().includes(this.search.toLocaleLowerCase()) || user.last_name.toLocaleLowerCase().includes(this.search.toLocaleLowerCase())) {
+            users.push(user);
+          }
+          return users;
+        }, []);
       }
     }
   }
