@@ -14,8 +14,8 @@ services:
     volumes:
       - ./volumes/logs:/logs
     environment:
-      - VIRTUAL_HOST=api.bpleague.cs-campus.fr
-      - LETSENCRYPT_HOST=api.bpleague.cs-campus.fr
+      - VIRTUAL_HOST=api-bpleague.cs-campus.fr
+      - LETSENCRYPT_HOST=api-bpleague.cs-campus.fr
       - LETSENCRYPT_EMAIL=alexistacnet@gmail.com
 
   bpleague-front:
