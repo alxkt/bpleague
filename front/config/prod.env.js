@@ -1,6 +1,6 @@
 'use strict'
 module.exports = {
   NODE_ENV: '"production"',
-  AUTH_URL: '"http://bpleague.cs-campus.fr:5000/auth"',
-  API_URL: '"http://bpleague.cs-campus.fr:5000/api/v1"'
+  AUTH_URL: '"https://api.bpleague.cs-campus.fr/auth"',
+  API_URL: '"https://api.bpleague.cs-campus.fr/api/v1"'
 }
