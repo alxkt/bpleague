@@ -1,0 +1,23 @@
+{
+  "oauth": {
+    "CLIENT_ID": "",
+    "CLIENT_SECRET": "",
+    "auth_url": "https://auth.viarezo.fr/oauth/authorize",
+    "token_url": "https://auth.viarezo.fr/oauth/token",
+    "base_url": "https://auth.viarezo.fr/api/",
+    "me_path": "user/show/me",
+    "callback_url": "https://bpleague.cs-campus.fr/auth/callback"
+  },
+  "database": {
+    "host": "postgres",
+    "user": "bpleague",
+    "password": ""
+  },
+  "log": "INFO",
+  "flask": {
+    "debug": true,
+    "jwt_secret": "",
+    "oauth_secret": "",
+    "jwt_expiration": 2592000
+  }
+}

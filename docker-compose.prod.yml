@@ -5,11 +5,37 @@ services:
     image: postgres:latest
     environment:
       - POSTGRES_USER=bpleague
-      - POSTGRES_PASSWORD=###
+      - POSTGRES_PASSWORD=bpleague
     volumes:
       - ./volumes/postgres:/var/lib/postgresql/data
 
-  bpleague:
+  bpleague-back:
     build: ./back/
+    environment:
+      - VIRTUAL_HOST=api.bpleague.cs-campus.fr
+
+  bpleague-front:
+    image: nginx:latest
+    volumes:
+      - ./front/dist:/usr/share/nginx/html:ro
+    environment:
+      - VIRTUAL_HOST=bpleague.cs-campus.fr
+
+  proxy:
+    image: jwilder/nginx-proxy:latest
+    label: com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
+    volumes:
+      - /usr/share/nginx/html
+      - ./front/certs:/etc/nginx/certs:ro
+      - /etc/nginx/vhost.d
+      - /var/run/docker.sock:/tmp/docker.sock:ro
     ports:
-      - 5000:8000
+      - 80:80
+      - 443:443
+
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion:latest
+    volumes_from: proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./front/certs:/etc/nginx/certs:rw
