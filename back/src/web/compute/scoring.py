@@ -9,8 +9,8 @@ def compute_scoring(users, matchs):
         users_indexed[user['id']] = user
 
     for match in matchs:
-        teamAB = [match['id_playerA'], match['id_playerB']]
-        teamCD = [match['id_playerC'], match['id_playerD']]
+        teamAB = [match['playerA'], match['playerB']]
+        teamCD = [match['playerC'], match['playerD']]
         if match['scoreAB'] == 0:
             # AB has loosed
             loosers = teamAB

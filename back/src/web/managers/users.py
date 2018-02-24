@@ -11,21 +11,24 @@ class UsersManager:
 
     def __init__(self):
         self.db = db
+        self.db.connect(reuse_if_open=True)
+
+    def __del__(self):
+        self.db.close()
 
     def get_all(self, search=None):
-        with self.db.transaction():
-            user_list = []
-            if search is None or search == '':
-                query = User.select().dicts()
-            else:
-                query = User.select().where(
-                    (User.first_name.contains(search)) |
-                    (User.last_name.contains(search))
-                ).dicts()
-            for user in query:
-                user_list.append(user)
-            logger.debug('Get all users from db. Number of users : {}'.format(len(user_list)))
-            return user_list
+        user_list = []
+        if search is None or search == '':
+            query = User.select().dicts()
+        else:
+            query = User.select().where(
+                (User.first_name.contains(search)) |
+                (User.last_name.contains(search))
+            ).dicts()
+        for user in query:
+            user_list.append(user)
+        logger.debug('Get all users from db. Number of users : {}'.format(len(user_list)))
+        return user_list
 
     def get(self, id):
         with self.db.transaction():
@@ -37,7 +40,7 @@ class UsersManager:
                 raise UserNotExisting
 
     def create_user(self, email, first_name, last_name, admin=False):
-        if re.match(r'^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$', email) is None:
+        if re.match(r'(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)', email) is None:
             raise BadEmail
         with self.db.atomic():
             try:

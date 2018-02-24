@@ -1,3 +1,5 @@
+import click
+
 from .cli import cli
 
 
@@ -7,14 +9,8 @@ def delete():
 
 
 @delete.command()
-def users():
-    from web.managers import UsersManager
-    manager = UsersManager()
-    manager.delete_users_table()
-
-
-@delete.command()
-def matchs():
+@click.option('--id', prompt=True)
+def match(id):
     from web.managers import MatchsManager
-    manager = MatchsManager()
-    manager.delete_matchs_table()
+    manager = MatchsManager(user_id=0)
+    manager.delete_matchs(id)

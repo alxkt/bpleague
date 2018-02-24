@@ -11,48 +11,59 @@ class MatchsManager:
 
     def __init__(self, user_id=None):
         self.db = db
+        self.db.connect(reuse_if_open=True)
         self.user_id = user_id
 
+    def __del__(self):
+        self.db.close()
+
     def get_all(self):
-        with self.db.transaction():
-            matchs_list = []
-            for match in Match.select().dicts():
-                matchs_list.append(match)
-            logger.debug('Get all matchs from db. Number of matchs : {}'.format(len(matchs_list)))
-            return matchs_list
+        matchs_list = []
+        for match in Match.select().dicts():
+            matchs_list.append(match)
+        logger.debug('Get all matchs from db. Number of matchs : {}'.format(len(matchs_list)))
+        return matchs_list
 
     def get(self, id):
-        with self.db.transaction():
-            try:
-                match = Match.get(Match.id == id)
-                logger.debug('Get {} match. Response : {}'.format(id, match))
-                return match.get_data()
-            except DoesNotExist:
-                raise MatchError
+        try:
+            match = Match.get(Match.id == id)
+            logger.debug('Get {} match. Response : {}'.format(id, match))
+            return match.get_data()
+        except DoesNotExist:
+            raise MatchError('Get not possible.')
 
     def add_match(self, body):
         for field in self.MANDATORY_FIELDS:
             if field not in body.keys():
-                raise MatchError
+                raise MatchError('{} is missing from body.'.format(field))
 
-        date = datetime.datetime.now()
+        if 'date' not in body.keys():
+            body['date'] = datetime.datetime.now()
         with self.db.atomic():
             try:
                 match = Match.create(
-                    id_playerA=body['playerA'],
-                    id_playerB=body['playerB'],
-                    id_playerC=body['playerC'],
-                    id_playerD=body['playerD'],
+                    playerA=body['playerA'],
+                    playerB=body['playerB'],
+                    playerC=body['playerC'],
+                    playerD=body['playerD'],
                     issuer=self.user_id,
                     scoreAB=body['scoreAB'],
                     scoreCD=body['scoreCD'],
                     contested=False,
-                    date=date
+                    date=body['date']
                 )
                 return match
             except IntegrityError:
-                raise MatchError
+                raise MatchError('Match already created.')
 
     def delete_matchs_table(self):
         with self.db.atomic():
             Match.drop_table()
+
+    def delete_matchs(self, id):
+        try:
+            match = Match.get(Match.id == id)
+            logger.debug('Get {} match. Response : {}'.format(id, match))
+            return match.get_data()
+        except DoesNotExist:
+            raise MatchError('Can\'t delete match.')

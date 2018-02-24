@@ -20,3 +20,24 @@ def user(mail, firstname, lastname, admin):
         manager.create_user(mail, firstname, lastname, admin)
     except UserAlreadyRegistered:
         click.echo('User {} already registered'.format(mail))
+
+
+@create.command()
+@click.option('--playerA', prompt=True)
+@click.option('--playerB', prompt=True)
+@click.option('--playerC', prompt=True)
+@click.option('--playerD', prompt=True)
+@click.option('--scoreAB', prompt=True)
+@click.option('--scoreCD', prompt=True)
+def match(playerA, playerB, playerC, playerD, scoreAB, scoreCD):
+    from web.managers import MatchsManager
+    manager = MatchsManager(user_id=0)
+    body = {
+        'playerA': playerA,
+        'playerB': playerB,
+        'playerC': playerC,
+        'playerD': playerD,
+        'scoreAB': scoreAB,
+        'scoreCD': scoreCD
+    }
+    manager.add_match(body)

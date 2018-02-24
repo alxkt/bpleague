@@ -5,8 +5,6 @@ from ..managers import UsersManager, MatchsManager
 from ..config import logger
 from ..compute.scoring import compute_scoring
 
-userManager = UsersManager()
-
 
 class Users(Resource):
     """
@@ -21,6 +19,7 @@ class Users(Resource):
         """
         search = request.args.get('search', None)
         score = request.args.get('score', False)
+        userManager = UsersManager()
         users = userManager.get_all(search=search)
         if score:
             match_manager = MatchsManager()
@@ -41,4 +40,5 @@ class User(Resource):
         :return: the user demanded
         """
         logger.debug('Get on /users/:id called.')
+        userManager = UsersManager()
         return userManager.get(user_id)

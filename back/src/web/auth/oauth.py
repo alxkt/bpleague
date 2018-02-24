@@ -55,15 +55,16 @@ def create_oauth(app, auth_bp):
         session['viarezo_token'] = (resp['access_token'], '')
         me = viarezo.get(config['oauth']['me_path'])
         email = me.data['email']
-        with db.transaction():
-            users = User.select().where(User.email == email)
-            if len(users) > 0:
-                user = users[0]
-            else:
-                manager = UsersManager()
-                first_name = me.data['firstName']
-                last_name = me.data['lastName']
-                user = manager.create_user(email, first_name, last_name)
+        db.connect(reuse_if_open=True)
+        users = User.select().where(User.email == email)
+        db.close()
+        if len(users) > 0:
+            user = users[0]
+        else:
+            manager = UsersManager()
+            first_name = me.data['firstName']
+            last_name = me.data['lastName']
+            user = manager.create_user(email, first_name, last_name)
 
         identity = {"id": user.id, "admin": user.admin}
         response = {'access_token': create_access_token(identity=identity),

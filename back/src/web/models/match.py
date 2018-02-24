@@ -5,10 +5,10 @@ from ..database import db
 
 class Match(Model):
     id = PrimaryKeyField()
-    id_playerA = IntegerField()
-    id_playerB = IntegerField()
-    id_playerC = IntegerField()
-    id_playerD = IntegerField()
+    playerA = IntegerField()
+    playerB = IntegerField()
+    playerC = IntegerField()
+    playerD = IntegerField()
     scoreAB = IntegerField()
     scoreCD = IntegerField()
     issuer = IntegerField()

@@ -17,7 +17,7 @@ def users():
 
 
 @get.command()
-def matchs():
+def matches():
     from web.managers import MatchsManager
     manager = MatchsManager()
     click.echo(click.style('== Matchs ==', bold=True))
