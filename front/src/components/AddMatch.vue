@@ -19,7 +19,6 @@
                     slot="activator"
                     v-model="ally.name"
                     label="Votre partenaire"
-                    id="testing"
                     autofocus
                     clearable
                     :loading="loading"
@@ -49,7 +48,6 @@
                     slot="activator"
                     v-model="adversaryA.name"
                     label="Adversaire 1"
-                    id="testing"
                     :loading="loading"
                   ></v-text-field>
                   <v-progress-linear
@@ -68,7 +66,6 @@
                     slot="activator"
                     v-model="adversaryB.name"
                     label="Adversaire 2"
-                    id="testing"
                     :loading="loading"
                   ></v-text-field>
                   <v-progress-linear
