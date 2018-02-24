@@ -9,11 +9,13 @@ def get():
 
 
 @get.command()
-def users():
+@click.option('--search')
+@click.option('--max')
+def users(search, max):
     from web.managers import UsersManager
     manager = UsersManager()
     click.echo(click.style('== Users ==', bold=True))
-    click.echo(manager.get_all())
+    click.echo(manager.get_all(search, max))
 
 
 @get.command()
