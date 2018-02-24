@@ -14,7 +14,7 @@
                 <div style="padding: 1em;" v-if="step == 1">
                   <span class="headline">Votre équipe</span>
                   <v-divider style="margin-bottom: 1em;"></v-divider>
-                  <v-menu full-width :open-on-click="false" :close-on-click="false" :value="search.length > 0" offset-y>
+                  <v-menu full-width :open-on-click="false" :close-on-click="false" :value="search.length > 0" offset-y allow-overflow>
                   <v-text-field
                     slot="activator"
                     v-model="ally.name"
@@ -44,7 +44,7 @@
                 <div style="padding: 1em;" v-if="step == 2">
                   <span class="headline">Vos adversaires</span>
                   <v-divider style="margin-bottom: 1em;"></v-divider>
-                  <v-menu full-width :open-on-click="false" :close-on-click="false" :value="search.length > 0 && adversaryA.id === null" offset-y>
+                  <v-menu full-width :open-on-click="false" :close-on-click="false" :value="search.length > 0 && adversaryA.id === null" allow-overflow offset-y>
                   <v-text-field
                     slot="activator"
                     v-model="adversaryA.name"
@@ -63,7 +63,7 @@
                     </v-list-tile>
                   </v-list>
                 </v-menu>
-                  <v-menu full-width :open-on-click="false" :close-on-click="false" :value="search.length > 0 && adversaryA.id !== null" offset-y>
+                  <v-menu full-width :open-on-click="false" :close-on-click="false" :value="search.length > 0 && adversaryA.id !== null" allow-overflow offset-y>
                   <v-text-field
                     slot="activator"
                     v-model="adversaryB.name"
