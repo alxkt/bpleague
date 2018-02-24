@@ -224,13 +224,13 @@
   }
 </script>
 
-<style scoped>
+<style>
   .add-match {
     margin-top: 2em;
   }
 
-  #splash {
-    background-image: url('../assets/images/splash.jpg');
+  .slider__thumb {
+    width: 32px;
+    height: 32px;
   }
-
 </style>
