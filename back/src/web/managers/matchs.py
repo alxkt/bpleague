@@ -63,7 +63,7 @@ class MatchsManager:
     def delete_matchs(self, id):
         try:
             match = Match.get(Match.id == id)
-            logger.debug('Get {} match. Response : {}'.format(id, match))
-            return match.get_data()
+            logger.debug('Get match {}. Response : {}'.format(id, match))
+            match.delete_instance()
         except DoesNotExist:
             raise MatchError('Can\'t delete match.')

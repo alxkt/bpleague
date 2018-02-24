@@ -19,8 +19,9 @@ class Users(Resource):
         """
         search = request.args.get('search', None)
         score = request.args.get('score', False)
+        max = request.args.get('max', None)
         userManager = UsersManager()
-        users = userManager.get_all(search=search)
+        users = userManager.get_all(search=search, max=max)
         if score:
             match_manager = MatchsManager()
             users = compute_scoring(users, match_manager.get_all())

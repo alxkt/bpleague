@@ -16,7 +16,7 @@ class UsersManager:
     def __del__(self):
         self.db.close()
 
-    def get_all(self, search=None):
+    def get_all(self, search=None, max=None):
         user_list = []
         if search is None or search == '':
             query = User.select().dicts()
@@ -28,6 +28,8 @@ class UsersManager:
         for user in query:
             user_list.append(user)
         logger.debug('Get all users from db. Number of users : {}'.format(len(user_list)))
+        if max is not None:
+            user_list = user_list[:min([len(user_list), int(max)])]
         return user_list
 
     def get(self, id):

@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from '@/components/auth/Login'
 import Callback from '@/components/auth/Callback'
 import Main from '@/components/Main'
+import AddMatch from '@/components/AddMatch'
 
 Vue.use(Router);
 
@@ -22,6 +23,11 @@ export default new Router({
       path: '/main',
       name: 'Main',
       component: Main
+    },
+    {
+      path: '/main/add',
+      name: 'AddMatch',
+      component: AddMatch
     }
   ]
 })

@@ -1,9 +1,11 @@
 <template>
   <div class="callback">
-    <img src="../../assets/title.png" id="title" class="uk-margin">
-    <div class="uk-card uk-card-default uk-card-body uk-padding-large" id="loading">
-      <div uk-spinner></div>
-    </div>
+    <v-layout row>
+      <v-flex xs12 sm6 offset-sm3>
+        <img src="../../assets/title.png" id="title" class="uk-margin"><br/>
+        <v-progress-circular indeterminate color="primary"></v-progress-circular>
+      </v-flex>
+    </v-layout>
   </div>
 </template>
 

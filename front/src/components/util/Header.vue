@@ -1,46 +1,28 @@
 <template>
   <div class="header">
-    <nav class="uk-navbar uk-navbar-container uk-navbar-transparent uk-padding-small"
-         uk-navbar="dropbar: true; dropbar-mode: push">
-      <div class="uk-navbar-left">
-        <ul class="uk-navbar-nav uk-hidden@l">
-          <li>
-            <a class="uk-navbar-toggle" uk-navbar-toggle-icon></a>
-            <div class="uk-navbar-dropdown" id="nav">
-              <ul class="uk-nav uk-navbar-dropdown-nav">
-                  <li class="uk-active"><a href="#">Classement</a></li>
-                  <li><a href="#">Mes matchs</a></li>
-              </ul>
-              <hr class="uk-divider-icon">
-              <a href="#" class="uk-button uk-button-text uk-width-1-1" v-if="name != null" v-on:click="logout">Connecté
-                en tant que {{ name }}</a>
-              <button class="uk-button uk-button-primary uk-width-1-1" href="#modal-full" uk-toggle>Ajouter un
-                match
-              </button>
-            </div>
-          </li>
-        </ul>
-        <a class="uk-navbar-item uk-logo uk-visible@l" href="#/main"><img src="../../assets/title.png"/></a>
-
-        <ul class="uk-navbar-nav uk-visible@l">
-          <li class="uk-active"><a href="#">Classement</a></li>
-          <li><a href="#">Mes matchs</a></li>
-        </ul>
-      </div>
-
-      <div class="uk-navbar-center uk-hidden@l">
-        <a class="uk-navbar-item uk-logo" href="#/main"><img src="../../assets/title.png"/></a>
-      </div>
-
-      <div class="uk-navbar-right uk-visible@l">
-        <a href="#" class="uk-button uk-button-text uk-margin-right" v-if="name != null" v-on:click="logout">Connecté en
-          tant que {{ name }}</a>
-        <button class="uk-button uk-button-primary uk-margin-right" href="#modal-full" uk-toggle>Ajouter un match
-        </button>
-      </div>
-    </nav>
-
-    <div class="uk-navbar-dropbar"></div>
+    <v-toolbar dense flat color="white">
+      <v-menu offset-y class="hidden-md-and-up">
+        <v-toolbar-side-icon slot="activator"></v-toolbar-side-icon>
+        <v-list>
+          <v-list-tile>
+            <v-list-tile-title>Connecté en tant que {{ name }}</v-list-tile-title>
+          </v-list-tile>
+          <v-divider></v-divider>
+          <v-list-tile color="primary" ripple to="/main/add">
+            <v-list-tile-title>Ajouter un match</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile v-if="name != null" v-on:click="logout" ripple>
+            <v-list-tile-title>Se déconnecter</v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
+      <v-toolbar-title><a href="#/main"><img src="../../assets/title.png"/></a></v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-toolbar-items class="hidden-sm-and-down">
+        <v-btn flat v-if="name != null" v-on:click="logout">Connecté en tant que {{ name }}</v-btn>
+        <v-btn color="primary" to="/main/add">Ajouter un match</v-btn>
+      </v-toolbar-items>
+    </v-toolbar>
   </div>
 </template>
 
@@ -72,18 +54,17 @@
 </script>
 
 <style scoped>
-  .uk-logo img {
-    max-height: 42px;
-    margin-top: -4px;
+  .header {
+    margin: 0.5em;
   }
 
-  #nav {
-    width: 93%;
-  }
-
-  @media only screen and (max-width: 640px) {
-    .uk-logo img {
-      margin-top: 1px;
+  @media (min-width: 960px) {
+    .header {
+      margin: 2em;
     }
+  }
+
+  .toolbar__title, .toolbar__title a, .toolbar__title a img {
+    height: 100%;
   }
 </style>

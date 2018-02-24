@@ -1,6 +1,5 @@
 import axios from 'axios';
 import auth from '../auth';
-import UIkit from 'uikit';
 
 function addMatch(playerA, playerB, playerC, playerD, scoreAB, scoreCD) {
   const data = {

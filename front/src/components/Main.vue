@@ -1,53 +1,51 @@
 <template>
   <div class="main">
-    <div class="uk-container">
-      <h1 class="uk-heading-divider">Classement <span uk-icon="refresh" id="refresh" v-on:click="updateLeaderboard"></span></h1>
+    <v-card flat>
+      <v-layout row pb-2>
+        <v-flex xs12 md8 offset-md2>
+          <v-card class="card--flex-toolbar">
+            <v-toolbar card prominent>
+              <v-toolbar-title class="headline grey--text hidden-sm-and-down">Classement</v-toolbar-title>
+              <v-spacer class="hidden-sm-and-down"></v-spacer>
+              <v-toolbar-title class="headline grey--text hidden-md-and-up" v-if='!searchDrawer'>Classement</v-toolbar-title>
+              <v-spacer class="hidden-md-and-up" v-if='!searchDrawer'></v-spacer>
 
-      <div class="uk-card uk-card-default uk-card-body uk-padding-large uk-overflow-auto" id="leaderboard">
-        <nav class="uk-navbar-container" uk-navbar>
-          <div class="uk-navbar-left">
-            <div class="uk-navbar-item">
-              <form class="uk-search uk-search-navbar">
-                <span uk-search-icon></span>
-                <input class="uk-search-input" type="search" placeholder="Search..." v-model="search">
-              </form>
-            </div>
-          </div>
-        </nav>
-        <table class="uk-table uk-table-divider uk-table-hover" v-if="users.length > 0">
-          <thead>
-          <tr>
-            <th class="uk-table-shrink">#</th>
-            <th class="uk-width-large">Nom</th>
-            <th class="uk-width-small uk-visible@s">Points</th>
-            <th class="uk-width-small uk-hidden@s">Pts</th>
-            <th class="uk-width-small uk-visible@s">Joués</th>
-            <th class="uk-width-small uk-hidden@s">J</th>
-            <th class="uk-width-small uk-visible@s">Victoires</th>
-            <th class="uk-width-small uk-hidden@s">V</th>
-            <th class="uk-width-small uk-visible@s">Defaites</th>
-            <th class="uk-width-small uk-hidden@s">D</th>
-            <th class="uk-width-small uk-visible@s">Goal Average</th>
-            <th class="uk-width-small uk-hidden@s">GA</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr v-for="user in users_filtered" v-if="user.score > 0" v-bind:class="{ me: user.id === me_id }">
-            <td>{{ users.indexOf(user) + 1 }}</td>
-            <td>{{ user.first_name }} {{ user.last_name }}</td>
-            <td>{{ user.score }}</td>
-            <td>{{ user.matches }}</td>
-            <td>{{ user.victories }}</td>
-            <td>{{ user.looses }}</td>
-            <td>{{ user.goal_average }}</td>
-          </tr>
-          </tbody>
-        </table>
-        <div uk-spinner v-else id="spinner"></div>
-      </div>
-    </div>
-
-    <add-match></add-match>
+              <v-text-field v-if='searchDrawer' hide-details single-line label="Recherche" v-model="search" class="search"></v-text-field>
+              <v-btn icon @click="searchDrawer = !searchDrawer">
+                <v-icon>search</v-icon>
+              </v-btn>
+              <v-btn icon id="refresh" v-on:click="updateLeaderboard">
+                <v-icon>refresh</v-icon>
+              </v-btn>
+            </v-toolbar>
+            <v-divider></v-divider>
+            <v-card-text>
+              <v-data-table
+                :headers="headers"
+                :items="users"
+                :search="search"
+                :rows-per-page-items="rows"
+                rows-per-page-text="Joueurs par page :"
+                :loading="progress">
+                <v-progress-linear slot="progress" color="primary" indeterminate></v-progress-linear>
+                <template slot="items" slot-scope="props" v-bind:class="{ me: props.item.id === me_id }">
+                  <td v-bind:class="{ me: props.item.id === me_id }" class="text-xs-right">{{ props.item.rank }}</td>
+                  <td v-bind:class="{ me: props.item.id === me_id }">{{ props.item.name }}</td>
+                  <td v-bind:class="{ me: props.item.id === me_id }" class="text-xs-right">{{ props.item.score }}</td>
+                  <td v-bind:class="{ me: props.item.id === me_id }" class="text-xs-right">{{ props.item.matches }}</td>
+                  <td v-bind:class="{ me: props.item.id === me_id }" class="text-xs-right">{{ props.item.victories }}</td>
+                  <td v-bind:class="{ me: props.item.id === me_id }" class="text-xs-right">{{ props.item.looses }}</td>
+                  <td v-bind:class="{ me: props.item.id === me_id }" class="text-xs-right">{{ props.item.goal_average }}</td>
+                </template>
+                <v-alert slot="no-results" :value="true" color="error" icon="warning">
+                  Pas de resultats pour "{{ search }}".
+                </v-alert>
+              </v-data-table>
+            </v-card-text>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-card>
   </div>
 </template>
 
@@ -60,15 +58,22 @@
     name: 'Main',
     data() {
       return {
+        headers: [
+          {text: '#', align: 'left', value: 'rank'},
+          {text: 'Nom', align: 'left', value: 'name'},
+          {text: 'Points', value: 'score'},
+          {text: 'Matches', value: 'matches'},
+          {text: 'Victoires', value: 'victories'},
+          {text: 'Looses', value: 'looses'},
+          {text: 'GA', value: 'goal_average'}
+        ],
+        rows: [25,{"text":"All","value":-1}],
+        progress: false,
         users: [],
         users_filtered: [],
         me_id: auth.user.profile.id,
-        search: ''
-      }
-    },
-    watch: {
-      search: function (newSearch, oldSearch) {
-        this.updateFiltering();
+        search: '',
+        searchDrawer: false
       }
     },
     components: {
@@ -78,30 +83,27 @@
       this.updateLeaderboard();
 
       this.$root.$on('updateLeaderboard', () => {
-          this.updateLeaderboard();
+        this.updateLeaderboard();
       })
     },
     methods: {
       updateLeaderboard() {
         let main = this;
 
-        this.users = [];
+        this.progress = true;
         axios.get(process.env.API_URL + '/users?score=true')
           .then(function (response) {
             main.users = response.data;
-            main.updateFiltering();
+            main.users = main.users.map((item, i) => {
+              item.rank = i + 1;
+              item.name = item.first_name + ' ' + item.last_name;
+              return item;
+            });
+            main.progress = false;
           })
           .catch(function (error) {
             console.log(error);
           });
-      },
-      updateFiltering() {
-        this.users_filtered = this.users.reduce((users, user) => {
-          if (user.first_name.toLocaleLowerCase().includes(this.search.toLocaleLowerCase()) || user.last_name.toLocaleLowerCase().includes(this.search.toLocaleLowerCase())) {
-            users.push(user);
-          }
-          return users;
-        }, []);
       }
     }
   }
@@ -112,22 +114,8 @@
     width: 100%;
   }
 
-  .uk-card {
-    margin: 3em auto auto;
-  }
-
-  #spinner {
-    margin-left: 45%;
-    margin-top: 5em;
-  }
-
   .me {
     background-color: rgba(216, 245, 221, 0.69);
-  }
-
-  #refresh {
-    margin-top: 0.5em;
-    float: right;
   }
 
   #refresh:hover {
@@ -136,6 +124,10 @@
     -ms-animation: rotating 1s linear infinite;
     -o-animation: rotating 1s linear infinite;
     animation: rotating 1s linear infinite;
+  }
+
+  .search {
+    margin-left: 32px;
   }
 
   @-webkit-keyframes rotating /* Safari and Chrome */

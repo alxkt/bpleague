@@ -1,21 +1,26 @@
 <template>
   <div class="login">
-    <img src="../../assets/title.png" id="title" class="uk-margin">
-    <div class="uk-card uk-card-default uk-card-body uk-padding-large" id="text">
-      <h1 class="uk-heading-divider">Bienvenue</h1>
-      <p>
-        <b>BPLeague</b> est le site de League de Bière-Pong de CentraleSupéléc, developpé en collaboration avec
-        l'<b>AdR</b>.<br/>
-      </p>
-      <button class="uk-button uk-button-primary uk-margin uk-width-1-1" id="connect" v-on:click="login">Se connecter
-      </button>
-      <h3 class="uk-heading-divider">Concept</h3>
-      <p>
-        Rentrez chaque match que vous disputez en indiquant votre partenaire et vos adversaires ainsi que le score final.
-        Suivant ce score, un nombre de point est attribué à chaque équipe et un classement est determiné en temps réel.
-        En cas de litige, un mail est envoyé aux adversaires qui pourront contester le match.
-      </p>
-    </div>
+    <v-layout row>
+      <v-flex xs12 sm6 offset-sm3>
+        <img src="../../assets/title.png" id="title">
+
+        <v-card flat id="card">
+          <v-card-title primary-title>
+            <div class="text">
+              <div class="display-2">Bienvenue</div><v-divider></v-divider><br/>
+              <p class="grey--text body-2"><b>BPLeague</b> est le site de League de Bière-Pong de CentraleSupéléc, developpé en collaboration avec l'<b>AdR</b>.</p>
+
+              <v-btn block color="primary" v-on:click="login" id="connect">Se connecter</v-btn>
+
+              <div class="display-1">Concept</div><v-divider></v-divider><br/>
+              <p class="grey--text body-2">Rentrez chaque match que vous disputez en indiquant votre partenaire et vos adversaires ainsi que le score final.
+            Suivant ce score, un nombre de point est attribué à chaque équipe et un classement est determiné en temps réel.
+            En cas de litige, un mail est envoyé aux adversaires qui pourront contester le match.</p>
+            </div>
+          </v-card-title>
+        </v-card>
+      </v-flex>
+    </v-layout>
   </div>
 </template>
 
@@ -52,10 +57,19 @@
     margin-top: 3em;
   }
 
-  #text {
+  #card {
+    margin: 2em;
+  }
+
+  .text {
     width: 500px;
     max-width: 90%;
     margin: auto;
     text-align: left;
+  }
+
+  #connect {
+    margin-top: 2em;
+    margin-bottom: 2em;
   }
 </style>

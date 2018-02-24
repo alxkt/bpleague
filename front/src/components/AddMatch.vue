@@ -1,105 +1,135 @@
 <template>
-  <div class="add-match uk-animation-toggle">
-    <div id="modal-full" class="uk-modal-full uk-animation-slide-top" uk-modal>
-      <div class="uk-modal-dialog">
-        <button class="uk-modal-close-full uk-close-large" type="button" uk-close></button>
-        <div class="uk-grid-collapse uk-child-width-1-2@s uk-flex-middle" uk-grid>
-          <div class="uk-background-cover uk-visible@s" uk-height-viewport id="splash"></div>
-          <div class="uk-padding-large" uk-height-viewport>
-            <h1 class="uk-heading-divider">Ajouter un match</h1>
-            <form class="uk-form-horizontal uk-margin-large">
-              <fieldset class="uk-fieldset">
-                <div class="uk-margin">
-                  <input class="uk-input boundary-align" type="text" placeholder="Partenaire" v-model="ally.name">
-                  <div uk-drop="mode: click; pos: bottom-justify; boundary: .boundary-align; boundary-align: true">
-                    <div class="uk-card uk-card-body uk-card-default" v-if="search.length > 0 && ally.id == null">
-                      <ul class="uk-list uk-list-divider">
-                        <li v-for="ally_search in search" v-on:click="select(ally, ally_search)">{{ ally_search.name }}</li>
-                      </ul>
-                    </div>
-                  </div>
+  <div class="add-match">
+    <v-card flat>
+      <v-layout row pb-2>
+        <v-flex xs12 md8 offset-md2>
+          <v-stepper v-model="step">
+            <v-stepper-header>
+              <v-stepper-step step="1" :complete="step > 1">Votre équipe</v-stepper-step>
+              <v-divider></v-divider>
+              <v-stepper-step step="2">Vos adversaires</v-stepper-step>
+            </v-stepper-header>
+            <v-stepper-items>
+              <v-stepper-content step="1">
+                <div style="padding: 1em;" v-if="step == 1">
+                  <span class="headline">Votre équipe</span>
+                  <v-divider style="margin-bottom: 1em;"></v-divider>
+                  <v-menu full-width :open-on-click="false" :close-on-click="false" :value="search.length > 0" offset-y>
+                  <v-text-field
+                    slot="activator"
+                    v-model="ally.name"
+                    label="Votre partenaire"
+                    id="testing"
+                    autofocus
+                    clearable
+                    :loading="loading"
+                  ></v-text-field>
+                  <v-progress-linear
+                    slot="progress"
+                    height="7"
+                    color="primary"
+                  ></v-progress-linear>
+                  <v-list>
+                    <v-list-tile v-for="ally_search in search" :key="ally_search.id" @click="select(ally, ally_search)" class="search">
+                      <v-list-tile-title>{{ ally_search.name }}</v-list-tile-title>
+                    </v-list-tile>
+                  </v-list>
+                </v-menu>
+                  <v-slider v-model="score_us" thumb-label step="1" max="10" ticks label="Vos verres restants"></v-slider>
                 </div>
-
-                <h2 class="uk-heading-line uk-text-center"><span>Adversaires</span></h2>
-
-                <div class="uk-margin">
-                  <input class="uk-input" type="text" placeholder="Adversaire A" v-model="adversaryA.name">
-                  <div uk-drop="mode: click; pos: bottom-justify; boundary: .boundary-align; boundary-align: true">
-                    <div class="uk-card uk-card-body uk-card-default" v-if="search.length > 0 && adversaryA.id == null">
-                      <ul class="uk-list uk-list-divider">
-                        <li v-for="adversary_search in search" v-on:click="select(adversaryA, adversary_search)">{{ adversary_search.name }}</li>
-                      </ul>
-                    </div>
-                  </div>
+                <v-btn color="primary" @click.native="step = 2">Next !</v-btn>
+                <v-btn flat to="/main">Cancel</v-btn>
+              </v-stepper-content>
+              <v-stepper-content step="2">
+                <div style="padding: 1em;" v-if="step == 2">
+                  <span class="headline">Vos adversaires</span>
+                  <v-divider style="margin-bottom: 1em;"></v-divider>
+                  <v-menu full-width :open-on-click="false" :close-on-click="false" :value="search.length > 0 && adversaryA.id === null" offset-y>
+                  <v-text-field
+                    slot="activator"
+                    v-model="adversaryA.name"
+                    label="Adversaire 1"
+                    id="testing"
+                    :loading="loading"
+                  ></v-text-field>
+                  <v-progress-linear
+                    slot="progress"
+                    height="7"
+                    color="primary"
+                  ></v-progress-linear>
+                  <v-list>
+                    <v-list-tile v-for="adversary_search in search" :key="adversary_search.id" @click="select(adversaryA, adversary_search)" class="search">
+                      <v-list-tile-title>{{ adversary_search.name }}</v-list-tile-title>
+                    </v-list-tile>
+                  </v-list>
+                </v-menu>
+                  <v-menu full-width :open-on-click="false" :close-on-click="false" :value="search.length > 0 && adversaryA.id !== null" offset-y>
+                  <v-text-field
+                    slot="activator"
+                    v-model="adversaryB.name"
+                    label="Adversaire 2"
+                    id="testing"
+                    :loading="loading"
+                  ></v-text-field>
+                  <v-progress-linear
+                    slot="progress"
+                    height="7"
+                    color="primary"
+                  ></v-progress-linear>
+                  <v-list>
+                    <v-list-tile v-for="adversary_search in search" :key="adversary_search.id" @click="select(adversaryB, adversary_search)" class="search">
+                      <v-list-tile-title>{{ adversary_search.name }}</v-list-tile-title>
+                    </v-list-tile>
+                  </v-list>
+                </v-menu>
+                  <v-slider v-model="score_them" thumb-label step="1" max="10" ticks label="Leurs verres restants"></v-slider>
                 </div>
+                <v-btn color="primary" @click="addMatch()">Add match !</v-btn>
+                <v-btn flat @click="step = 1">Cancel</v-btn>
+              </v-stepper-content>
+            </v-stepper-items>
+          </v-stepper>
+        </v-flex>
+      </v-layout>
+    </v-card>
 
-                <div class="uk-margin">
-                  <input class="uk-input" type="text" placeholder="Adversaire B" v-model="adversaryB.name">
-                  <div uk-drop="mode: click; pos: bottom-justify; boundary: .boundary-align; boundary-align: true">
-                    <div class="uk-card uk-card-body uk-card-default" v-if="search.length > 0 && adversaryB.id == null">
-                      <ul class="uk-list uk-list-divider">
-                        <li v-for="adversary_search in search" v-on:click="select(adversaryB, adversary_search)">{{ adversary_search.name }}</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-
-                <h2 class="uk-heading-line uk-text-center"><span>Verres restants</span></h2>
-
-                <div class="uk-margin">
-                  <div class="uk-form-label">Votre équipe : {{ score_us }}</div>
-                  <div class="uk-form-controls uk-form-controls-text">
-                    <input class="uk-range" type="range" value="0" min="0" max="10" step="1"
-                           v-model="score_us">
-                  </div>
-                </div>
-
-                <div class="uk-margin">
-                  <div class="uk-form-label">Vos adversaires : {{ score_them }}</div>
-                  <div class="uk-form-controls uk-form-controls-text">
-                    <input class="uk-range" type="range" value="0" min="0" max="10" step="1"
-                           v-model="score_them">
-                  </div>
-                </div>
-              </fieldset>
-
-              <button class="uk-button uk-button-primary uk-margin uk-width-1-1" v-on:click="addMatch()">Ajouter le match</button>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
+    <v-snackbar top v-model="snackbar">
+      {{ snackbar_text }}
+      <v-btn flat color="pink" @click.native="snackbar = false">Close</v-btn>
+    </v-snackbar>
   </div>
 </template>
 
 <script>
   import axios from 'axios';
   import _ from 'lodash';
-  import UIkit from 'uikit';
 
   import matchs from '../modules/matchs';
   import auth from '../modules/auth';
 
   function init() {
     return {
-        score_us: 0,
-        score_them: 0,
-        ally: {
-          name: '',
-          id: null
-        },
-        adversaryA: {
-          name: '',
-          id: null
-        },
-        adversaryB: {
-          name: '',
-          id: null
-        },
-        search: [],
-        searchNames: []
-      }
+      loading: false,
+      snackbar: false,
+      snackbar_text: '',
+      score_us: 0,
+      score_them: 0,
+      step: 0,
+      ally: {
+        name: '',
+        id: null
+      },
+      adversaryA: {
+        name: '',
+        id: null
+      },
+      adversaryB: {
+        name: '',
+        id: null
+      },
+      search: [],
+      searchNames: []
+    }
   }
 
   export default {
@@ -143,8 +173,8 @@
         function (search) {
           let addMatch = this;
           const me_id = auth.user.profile.id;
-
-          axios.get(process.env.API_URL + '/users?search=' + search)
+          this.loading = true;
+          axios.get(process.env.API_URL + '/users?search=' + search + '&max=10')
             .then(function (response) {
               addMatch.search = response.data;
               addMatch.search = addMatch.search.reduce(function (a, b) {
@@ -156,6 +186,7 @@
                 }
                 return a;
               }, []);
+              addMatch.loading = false;
             })
             .catch(function (error) {
               console.log(error);
@@ -163,7 +194,7 @@
         },
         500
       ),
-      select: function(field, search) {
+      select: function (field, search) {
         field.name = search.name;
         field.id = search.id;
       },
@@ -171,18 +202,22 @@
         const me_id = auth.user.profile.id;
         let vw = this;
         if (this.ally.id == null) {
-          UIkit.notification("Vous n'avez pas mis de partenaire !", {status: 'danger'});
+          this.snackbar_text = 'Vous n\'avez pas mis de partenaire !';
+          this.snackbar = true;
         } else if (this.adversaryA.id == null || this.adversaryB.id == null) {
-          UIkit.notification("Vous n'avez pas mis d'adversaire !", {status: 'danger'});
-        } else if (this.score_us === 0 && this.score_them === 0 ) {
-          UIkit.notification("Le score indiqué est un peu chelou.", {status: 'danger'});
+          this.snackbar_text = 'Vous n\'avez pas mis d\'adversaire !';
+          this.snackbar = true;
+        } else if ((this.score_us !== 0 && this.score_them !== 0) || (this.score_us === 0 && this.score_them === 0)) {
+          this.snackbar_text = 'Vous n\'avez pas mis de score cohérent !';
+          this.snackbar = true;
         } else {
           matchs.addMatch(me_id, this.ally.id, this.adversaryA.id, this.adversaryB.id, this.score_us, this.score_them).then(() => {
-            UIkit.modal('#modal-full').hide();
-            UIkit.notification("<span uk-icon='icon: check'></span> Match ajouté.", {status: 'primary'});
+            this.snackbar_text = 'Match ajouté avec succés.';
+            this.snackbar = true;
             Object.assign(this.$data, init());
             vw.$root.$emit('updateLeaderboard', true);
-          }).catch(() => {});
+          }).catch(() => {
+          });
         }
       }
     }
@@ -191,11 +226,7 @@
 
 <style scoped>
   .add-match {
-    width: 100%;
-  }
-
-  #modal-full {
-    z-index: 1030;
+    margin-top: 2em;
   }
 
   #splash {
