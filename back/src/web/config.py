@@ -3,6 +3,8 @@ import logging
 import os
 from datetime import timedelta
 
+from util import DateTimeEncoder
+
 config = json.load(open(os.environ.get('CONFIG_FILE', './config/config.json')))
 
 
@@ -11,6 +13,9 @@ class FlaskConfig(object):
     SECRET_KEY = config['flask'].get('oauth_secret', False)
     JWT_SECRET_KEY = config['flask'].get('jwt_secret', False)
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(seconds=config['flask'].get('jwt_expiration', 900))
+    RESTFUL_JSON = {'separators': (', ', ': '),
+                    'indent': 2,
+                    'cls': DateTimeEncoder}
 
 
 flask_config = FlaskConfig
