@@ -15,7 +15,7 @@
               <div class="display-1">Concept</div><v-divider></v-divider><br/>
               <p class="grey--text body-2">Rentrez chaque match que vous disputez en indiquant votre partenaire et vos adversaires ainsi que le score final.
             Suivant ce score, un nombre de point est attribué à chaque équipe et un classement est determiné en temps réel.
-            En cas de litige, un mail est envoyé aux adversaires qui pourront contester le match.</p>
+            En cas de litige, une notification est envoyée aux adversaires qui pourront contester le match.</p>
             </div>
           </v-card-title>
         </v-card>
