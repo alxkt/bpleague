@@ -21,4 +21,12 @@ def matches():
     from web.managers import MatchsManager
     manager = MatchsManager()
     if click.confirm('Caution, dropping a table. Continue ?'):
-        manager.delete_matchs_table()
+        manager.delete_matches_table()
+
+
+@drop.command()
+def notifications():
+    from web.managers import NotificationManager
+    manager = NotificationManager()
+    if click.confirm('Caution, dropping a table. Continue ?'):
+        manager.delete_notifications_tables()

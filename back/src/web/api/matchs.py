@@ -50,3 +50,21 @@ class Match(Resource):
         match_manager = MatchsManager(me_id)
         logger.debug('Get on /matchs/:id called.')
         return match_manager.get(match_id)
+
+    @jwt_required
+    def post(self, match_id):
+        """
+        Get an match by its id
+        :return: the match demanded
+        """
+        me_id = get_jwt_identity()['id']
+        match_manager = MatchsManager(me_id)
+        body = request.get_json()
+        if body is None:
+            return {'msg': 'no action'}, 400
+        contestation = body.get('contestation', False)
+        logger.debug('Post on /matchs/:id called. Contestation : {}'.format(contestation))
+        if contestation:
+            return match_manager.contest_match(match_id)
+        else:
+            return {'msg': 'nothing to do'}

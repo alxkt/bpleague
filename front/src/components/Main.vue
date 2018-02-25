@@ -1,11 +1,14 @@
 <template>
   <div class="main">
-    <v-card flat>
-      <v-layout row pb-2>
+    <v-container grid-list-xl fluid>
+      <v-layout column>
+        <v-flex xs12 md8 offset-md2>
+          <bpleague-notification v-for="notification in notifications" :key="notification.id" :notification="notification" :snackbar="snackbar"></bpleague-notification>
+        </v-flex>
         <v-flex xs12 md8 offset-md2>
           <v-card class="card--flex-toolbar">
             <v-toolbar card prominent>
-              <v-toolbar-title class="headline grey--text hidden-sm-and-down">Classement</v-toolbar-title>
+              <v-toolbar-title class="headline secondary--text hidden-sm-and-down">Classement général</v-toolbar-title>
               <v-spacer class="hidden-sm-and-down"></v-spacer>
               <v-toolbar-title class="headline grey--text hidden-md-and-up" v-if='!searchDrawer'>Classement</v-toolbar-title>
               <v-spacer class="hidden-md-and-up" v-if='!searchDrawer'></v-spacer>
@@ -45,17 +48,23 @@
           </v-card>
         </v-flex>
       </v-layout>
-    </v-card>
+    </v-container>
+
+    <v-snackbar top v-model="snackbar.show">{{ snackbar.text }}<v-btn flat color="pink" @click.native="snackbar.show = false">Close</v-btn>
+    </v-snackbar>
   </div>
 </template>
 
 <script>
-  import AddMatch from './AddMatch';
   import auth from '../modules/auth';
+  import Notification from './Notification';
   import axios from 'axios';
 
   export default {
     name: 'Main',
+    components: {
+      bpleagueNotification: Notification
+    },
     data() {
       return {
         headers: [
@@ -73,14 +82,17 @@
         users_filtered: [],
         me_id: auth.user.profile.id,
         search: '',
-        searchDrawer: false
+        searchDrawer: false,
+        notifications: [],
+        snackbar: {
+          text: '',
+          show: false
+        }
       }
-    },
-    components: {
-      AddMatch
     },
     created() {
       this.updateLeaderboard();
+      this.getNotifications();
     },
     methods: {
       updateLeaderboard() {
@@ -96,6 +108,16 @@
               return item;
             });
             main.progress = false;
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      },
+      getNotifications() {
+        let main = this;
+        axios.get(process.env.API_URL + '/notifications')
+          .then(function (response) {
+            main.notifications = response.data;
           })
           .catch(function (error) {
             console.log(error);

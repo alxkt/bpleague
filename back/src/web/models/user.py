@@ -27,8 +27,3 @@ class User(Model):
 
     class Meta:
         database = db
-
-
-db.connect()
-User.create_table(fail_silently=True)
-db.close()

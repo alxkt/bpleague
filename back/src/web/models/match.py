@@ -1,24 +1,21 @@
 from peewee import *
 
 from ..database import db
+from .user import User
 
 
 class Match(Model):
     id = PrimaryKeyField()
-    playerA = IntegerField()
-    playerB = IntegerField()
-    playerC = IntegerField()
-    playerD = IntegerField()
+    playerA = ForeignKeyField(User)
+    playerB = ForeignKeyField(User)
+    playerC = ForeignKeyField(User)
+    playerD = ForeignKeyField(User)
     scoreAB = IntegerField()
     scoreCD = IntegerField()
-    issuer = IntegerField()
-    date = DateField()
+    issuer = ForeignKeyField(User)
+    date = DateTimeField()
     contested = BooleanField()
 
     class Meta:
         database = db
 
-
-db.connect()
-Match.create_table(fail_silently=True)
-db.close()

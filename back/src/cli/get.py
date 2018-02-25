@@ -24,3 +24,12 @@ def matches():
     manager = MatchsManager()
     click.echo(click.style('== Matchs ==', bold=True))
     click.echo(manager.get_all())
+
+
+@get.command()
+@click.option('--id', prompt=True)
+def notifications(id):
+    from web.managers import NotificationManager
+    manager = NotificationManager(user_id=id)
+    click.echo(click.style('== Notifications ==', bold=True))
+    click.echo(manager.get())

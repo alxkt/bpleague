@@ -13,4 +13,21 @@ def delete():
 def match(id):
     from web.managers import MatchsManager
     manager = MatchsManager(user_id=0)
-    manager.delete_matchs(id)
+    manager.delete_matches(id)
+
+
+@delete.command()
+def matches():
+    from web.managers import MatchsManager
+    manager = MatchsManager(user_id=0)
+    matches = manager.get_all()
+    for match in matches:
+        manager.delete_matches(match['id'])
+
+
+@delete.command()
+@click.option('--id', prompt=True)
+def notification(id):
+    from web.managers import NotificationManager
+    manager = NotificationManager(user_id=0)
+    manager.delete_notifications(id)

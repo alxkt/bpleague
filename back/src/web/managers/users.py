@@ -1,6 +1,7 @@
 import re
 
 from peewee import IntegrityError, DoesNotExist
+from playhouse.shortcuts import model_to_dict
 
 from ..exceptions import *
 from ..models import User
@@ -12,6 +13,7 @@ class UsersManager:
     def __init__(self):
         self.db = db
         self.db.connect(reuse_if_open=True)
+        User.create_table(fail_silently=True)
 
     def __del__(self):
         self.db.close()
@@ -19,14 +21,14 @@ class UsersManager:
     def get_all(self, search=None, max=None):
         user_list = []
         if search is None or search == '':
-            query = User.select().dicts()
+            query = User.select()
         else:
             query = User.select().where(
                 (User.first_name.contains(search)) |
                 (User.last_name.contains(search))
-            ).dicts()
+            )
         for user in query:
-            user_list.append(user)
+            user_list.append(model_to_dict(user))
         logger.debug('Get all users from db. Number of users : {}'.format(len(user_list)))
         if max is not None:
             user_list = user_list[:min([len(user_list), int(max)])]
