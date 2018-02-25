@@ -41,7 +41,7 @@
         auth.logout();
       }
     },
-    mounted() {
+    created() {
       let header = this;
 
       auth.checkAuth().then(() => {

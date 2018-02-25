@@ -1,7 +1,11 @@
 <template>
   <div class="add-match">
-    <v-card flat>
-      <v-layout row pb-2>
+    <v-container grid-list-xl fluid>
+      <v-layout column>
+        <v-flex xs12 md8 offset-md2>
+          <span class="display-1">Ajouter un match</span>
+          <v-divider></v-divider>
+        </v-flex>
         <v-flex xs12 md8 offset-md2>
           <v-stepper v-model="step">
             <v-stepper-header>
@@ -12,8 +16,6 @@
             <v-stepper-items>
               <v-stepper-content step="1">
                 <div style="padding: 1em;" v-if="step == 1">
-                  <span class="headline">Votre équipe</span>
-                  <v-divider style="margin-bottom: 1em;"></v-divider>
                   <v-menu full-width :open-on-click="false" :close-on-click="false" :value="search.length > 0" offset-y allow-overflow>
                   <v-text-field
                     slot="activator"
@@ -34,15 +36,13 @@
                     </v-list-tile>
                   </v-list>
                 </v-menu>
-                  <v-slider v-model="score_us" thumb-label step="1" max="10" ticks label="Vos verres restants"></v-slider>
+                  <v-slider v-model="score_us" thumb-label step="1" max="10" ticks hint="Vos verres restants" label="Score"></v-slider>
                 </div>
                 <v-btn color="primary" @click.native="step = 2">Next !</v-btn>
                 <v-btn flat to="/main">Cancel</v-btn>
               </v-stepper-content>
               <v-stepper-content step="2">
                 <div style="padding: 1em;" v-if="step == 2">
-                  <span class="headline">Vos adversaires</span>
-                  <v-divider style="margin-bottom: 1em;"></v-divider>
                   <v-menu full-width :open-on-click="false" :close-on-click="false" :value="search.length > 0 && adversaryA.id === null" allow-overflow offset-y>
                   <v-text-field
                     slot="activator"
@@ -79,7 +79,7 @@
                     </v-list-tile>
                   </v-list>
                 </v-menu>
-                  <v-slider v-model="score_them" thumb-label step="1" max="10" ticks label="Leurs verres restants"></v-slider>
+                  <v-slider v-model="score_them" thumb-label step="1" max="10" ticks hint="Leurs verres restants" label="Score"></v-slider>
                 </div>
                 <v-btn color="primary" @click="addMatch()">Add match !</v-btn>
                 <v-btn flat @click="step = 1">Cancel</v-btn>
@@ -88,7 +88,7 @@
           </v-stepper>
         </v-flex>
       </v-layout>
-    </v-card>
+    </v-container>
 
     <v-snackbar top v-model="snackbar">
       {{ snackbar_text }}
@@ -209,11 +209,9 @@
           this.snackbar = true;
         } else {
           matchs.addMatch(me_id, this.ally.id, this.adversaryA.id, this.adversaryB.id, this.score_us, this.score_them).then(() => {
-            this.snackbar_text = 'Match ajouté avec succés.';
-            this.snackbar = true;
-            Object.assign(this.$data, init());
-            vw.$root.$emit('updateLeaderboard', true);
-          }).catch(() => {
+            vw.snackbar_text = 'Match ajouté avec succés.';
+            vw.snackbar = true;
+            vw.$router.push('/main');
           });
         }
       }
@@ -227,7 +225,7 @@
   }
 
   .slider__thumb {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
   }
 </style>

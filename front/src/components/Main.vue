@@ -79,12 +79,8 @@
     components: {
       AddMatch
     },
-    mounted() {
+    created() {
       this.updateLeaderboard();
-
-      this.$root.$on('updateLeaderboard', () => {
-        this.updateLeaderboard();
-      })
     },
     methods: {
       updateLeaderboard() {
