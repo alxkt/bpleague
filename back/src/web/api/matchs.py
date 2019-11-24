@@ -16,9 +16,9 @@ class Matchs(Resource):
         Get the list of matchs in BPLeague
         :return: list of matchs
         """
-        me_id = get_jwt_identity()['id']
+        me_id = get_jwt_identity()["id"]
         match_manager = MatchsManager(me_id)
-        logger.debug('Get on /matchs called.')
+        logger.debug("Get on /matchs called.")
         return match_manager.get_all()
 
     @jwt_required
@@ -27,12 +27,12 @@ class Matchs(Resource):
         Put a in BPLeague
         :return: message
         """
-        me_id = get_jwt_identity()['id']
+        me_id = get_jwt_identity()["id"]
         match_manager = MatchsManager(me_id)
         body = request.get_json()
         match_manager.add_match(body)
-        logger.debug('Put on /matchs called. Body : {}'.format(body))
-        return {'msg': 'success'}
+        logger.debug("Put on /matchs called. Body : {}".format(body))
+        return {"msg": "success"}
 
 
 class Match(Resource):
@@ -46,9 +46,9 @@ class Match(Resource):
         Get an match by its id
         :return: the match demanded
         """
-        me_id = get_jwt_identity()['id']
+        me_id = get_jwt_identity()["id"]
         match_manager = MatchsManager(me_id)
-        logger.debug('Get on /matchs/:id called.')
+        logger.debug("Get on /matchs/:id called.")
         return match_manager.get(match_id)
 
     @jwt_required
@@ -57,14 +57,16 @@ class Match(Resource):
         Get an match by its id
         :return: the match demanded
         """
-        me_id = get_jwt_identity()['id']
+        me_id = get_jwt_identity()["id"]
         match_manager = MatchsManager(me_id)
         body = request.get_json()
         if body is None:
-            return {'msg': 'no action'}, 400
-        contestation = body.get('contestation', False)
-        logger.debug('Post on /matchs/:id called. Contestation : {}'.format(contestation))
+            return {"msg": "no action"}, 400
+        contestation = body.get("contestation", False)
+        logger.debug(
+            "Post on /matchs/:id called. Contestation : {}".format(contestation)
+        )
         if contestation:
             return match_manager.contest_match(match_id)
         else:
-            return {'msg': 'nothing to do'}
+            return {"msg": "nothing to do"}
